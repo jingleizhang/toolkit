@@ -87,17 +87,6 @@ func GetUrlEncode(str string) string {
 	return url.QueryEscape(str)
 }
 
-func GetRandomBaiduUID() string {
-	rand.NewSource(time.Now().UnixNano())
-	var uid string
-	for i := 0; i < kUidLength; i++ {
-		uid = uid + kAlphabeta[rand.Intn(len(kAlphabeta))]
-	}
-
-	uid = uid + ":SL=0:NR=50:FG=1" //按50翻页
-	return uid
-}
-
 func GetHeaderAccept() string {
 	return "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
 }
@@ -186,7 +175,7 @@ func (httpUtil *HttpUtil) getRandomBaiduUID() string {
 	for i := 0; i < kUidLength; i++ {
 		uid = uid + kAlphabeta[httpUtil.random.Intn(len(kAlphabeta))]
 	}
-	uid = uid + ":SL=0:NR=100:FG=1" //按100翻页
+	uid = uid + ":SL=0:NR=50:FG=1"
 	return uid
 }
 
@@ -228,9 +217,8 @@ func (httpUtil *HttpUtil) unGzipHtml(html []byte) []byte {
 	return content
 }
 
-//使用本机ip, support https
 func (httpUtil *HttpUtil) HttpGetByDetail(url string, cookies []*http.Cookie, needWapUserAgent, needClean bool, queryWords string) (status int, html string, respcookie []*http.Cookie, respinfo string) {
-	status = 500 //common.RESP_STATUS_500ERROR
+	status = 500
 	respcookie = nil
 
 	realurl := "<real_url>" + url + "</real_url>"
@@ -307,9 +295,7 @@ func (httpUtil *HttpUtil) HttpGetByDetail(url string, cookies []*http.Cookie, ne
 	return status, string(htmlByte), respcookie, resp
 }
 
-//使用本机ip, support https
 func (httpUtil *HttpUtil) HTTPPostByDetail(hostUrl string, extHeaders map[string]string, postData map[string]string, reqCookie []*http.Cookie, needWapUserAgent, needClean bool, queryWords string) (status int, html string, respcookie []*http.Cookie, respinfo string) {
-	//common.RESP_STATUS_500ERROR
 	status = 500
 	respcookie = nil
 	var resp string
@@ -376,7 +362,6 @@ func (httpUtil *HttpUtil) HTTPPostByDetail(hostUrl string, extHeaders map[string
 		return status, "", respcookie, resp
 	}
 
-	//ungzip for some site
 	if httpUtil.isGZHtml(response) {
 		htmlByte = httpUtil.unGzipHtml(htmlByte)
 	}
@@ -396,5 +381,4 @@ func (httpUtil *HttpUtil) HTTPPostByDetail(hostUrl string, extHeaders map[string
 		return status, finialHtml, respcookie, resp
 	}
 	return status, string(htmlByte), respcookie, resp
-
 }
