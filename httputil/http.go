@@ -83,10 +83,6 @@ func NewProxyHttpUtil(proxy string, timeOutSeconds int) *HttpUtil {
 	return nil
 }
 
-func GetUrlEncode(str string) string {
-	return url.QueryEscape(str)
-}
-
 func GetHeaderAccept() string {
 	return "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
 }

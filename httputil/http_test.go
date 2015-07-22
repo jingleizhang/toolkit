@@ -51,14 +51,6 @@ func TestHttpBaidu(t *testing.T) {
 	log.Println("status, html'length, c, rsp:", status, len(html), c, rsp)
 }
 
-func TestUrlEncode(t *testing.T) {
-	encodeUrl := GetUrlEncode("8pctgRBMALO/DT664deaIFGHU+GqHDoq")
-	expectedEncodeUrl := "8pctgRBMALO%2FDT664deaIFGHU%2BGqHDoq"
-	if encodeUrl != expectedEncodeUrl {
-		t.Error("url encode not work!")
-	}
-}
-
 func TestCrawlWapdata(t *testing.T) {
 	url := "http://m.baidu.com/s?word=%E8%B4%B7%E6%AC%BE"
 	httpUtil := NewHttpUtil(40)
