@@ -1,6 +1,4 @@
-package base
-
-//from https://github.com/dropbox/godropbox
+package elog
 
 import (
 	"sync"
@@ -8,25 +6,10 @@ import (
 
 type SingletonInitFunc func() (interface{}, error)
 
-// Interface for accessing singleton objects.
-//
-// Example use:
-// var configSelectorSingleton = NewSingleton(init)
-// func configSelector() (configSelector, error) {
-//     s, err := configSelectorSingleton.Get()
-//     if err != nil {
-//         return nil, err
-//     }
-//     return s.(configSelector), nil
-// }
 type Singleton interface {
-	// Return the encapsulated singleton
 	Get() (interface{}, error)
 }
 
-// Call to create a new singleton that is instantiated with the given init function.
-// Init is not called until the first invocation of Get().
-// If init errors, it will be called again on the next invocation of Get().
 func NewSingleton(init SingletonInitFunc) Singleton {
 	return &singletonImpl{init: init}
 }
@@ -34,16 +17,12 @@ func NewSingleton(init SingletonInitFunc) Singleton {
 type singletonImpl struct {
 	sync.Mutex
 
-	// The actual singleton object
-	data interface{}
-	// Constructor for the singleton object
-	init SingletonInitFunc
-	// True if init was run without error
+	data        interface{} //actual singleton object
+	init        SingletonInitFunc
 	initialized bool
 }
 
 func (s *singletonImpl) Get() (interface{}, error) {
-	// Don't lock in the common case
 	if s.initialized {
 		return s.data, nil
 	}
